@@ -1,0 +1,130 @@
+{{ define "title" }}{{ .Title }}{{ end }}
+{{ define "main" }}
+
+<!-- Header -->
+<div id="quote-capture-area" class="py-12">
+    <div class="relative pt-16 pb-10 overflow-hidden text-center z-10">
+        <div class="absolute inset-0 pointer-events-none"
+            style="background: radial-gradient(ellipse at 50% -10%, rgba(124,92,191,0.08) 0%, transparent 60%);"></div>
+        <div class="container mx-auto px-4 sm:px-6 max-w-2xl relative z-10">
+            <p class="text-xs font-black tracking-widest uppercase mb-5 font-reem" style="color:var(--gold-antique);"
+                data-aos="fade-down">قطوفٌ وشَذرات</p>
+            <h1 class="text-4xl md:text-5xl font-black font-reem leading-tight mb-4" style="color:var(--gold-antique);"
+                data-aos="fade-up">{{ .Title }}</h1>
+            {{ if .Params.source }}
+            <p class="font-reem mb-2" style="color:var(--gold-antique);" data-aos="fade-up">— {{ .Params.source }}</p>
+            {{ end }}
+        </div>
+    </div>
+
+    <!-- Quote Body -->
+    <div class="container mx-auto px-4 sm:px-6 pb-20 flex justify-center">
+        <div data-aos="fade-up"
+            class="quote-card-large relative glass-card p-12 rounded-[2.5rem] w-full max-w-2xl mx-auto overflow-visible"
+            style="border: 1px solid rgba(197,160,89,0.15); background: rgba(15, 23, 42, 0.4);">
+
+            <!-- Modern Decorative Quote Marks -->
+            <div class="absolute -top-6 right-8 text-8xl font-serif select-none pointer-events-none opacity-20"
+                style="color: #C5A059; font-family: 'Cairo', serif; line-height: 1;">"</div>
+            <div class="absolute -bottom-10 left-8 text-8xl font-serif select-none pointer-events-none opacity-20 rotate-180"
+                style="color: #C5A059; font-family: 'Cairo', serif; line-height: 1;">"</div>
+
+            <div class="prose prose-2xl mx-auto text-right leading-loose relative z-10"
+                style="color: #F5F5DC; font-family: 'Cairo', sans-serif; font-size: 1.75rem; font-weight: 500;">
+                <style>
+                    .prose hr {
+                        display: none !important;
+                    }
+
+                    .prose p {
+                        margin-bottom: 2rem !important;
+                    }
+
+                    .prose * {
+                        color: #F5F5DC !important;
+                    }
+                </style>
+                {{ .Content }}
+            </div>
+
+            <!-- Custom Wax Seal -->
+            <div class="flex justify-center mt-12">
+                <img src="{{ "images/wax-seal-custom.png" | relURL }}" alt="Wax Seal"
+                    style="width:100px; height:auto; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Action Buttons -->
+<div class="flex items-center justify-center gap-5 mt-8 mb-24 no-capture" data-aos="fade-up">
+    <button onclick="handleQLike(this)" id="q-like-btn"
+        class="flex flex-col items-center gap-1 transition-all hover:scale-110" title="إعجاب">
+        <div class="w-11 h-11 rounded-full flex items-center justify-center shadow-md"
+            style="background:rgba(197,160,89,0.12); border:1px solid var(--gold-border-color);">
+            <i data-lucide="heart" class="w-4.5 h-4.5" style="color:var(--gold-antique);"></i>
+        </div>
+        <span id="q-like-count" class="text-xs font-bold" style="color:var(--gold-antique);">0</span>
+    </button>
+    <button onclick="handleQShare()" class="flex flex-col items-center gap-1 transition-all hover:scale-110"
+        title="مشاركة">
+        <div class="w-11 h-11 rounded-full flex items-center justify-center"
+            style="background:rgba(197,160,89,0.1); border:1px solid rgba(197,160,89,0.35);">
+            <i data-lucide="share-2" class="w-4.5 h-4.5" style="color:var(--gold-antique);"></i>
+        </div>
+        <span class="text-xs font-reem" style="color:var(--text-muted);">مشاركة</span>
+    </button>
+    <button onclick="handleQCopy()" class="flex flex-col items-center gap-1 transition-all hover:scale-110" title="نسخ">
+        <div class="w-11 h-11 rounded-full flex items-center justify-center"
+            style="background:rgba(197,160,89,0.1); border:1px solid var(--gold-border-color);">
+            <i data-lucide="copy" class="w-4.5 h-4.5" style="color:var(--gold-antique);"></i>
+        </div>
+        <span class="text-xs font-reem" style="color:var(--text-muted);">نسخ</span>
+    </button>
+    <button onclick="downloadAsImage('#quote-capture-area', 'quote-{{ .Title | urlize }}', this)"
+        class="flex flex-col items-center gap-1 transition-all hover:scale-110" title="تحميل كصورة">
+        <div class="w-11 h-11 rounded-full flex items-center justify-center"
+            style="background:rgba(197,160,89,0.1); border:1px solid var(--gold-border-color);">
+            <i data-lucide="image-down" class="w-4.5 h-4.5" style="color:var(--gold-antique);"></i>
+        </div>
+        <span class="text-xs font-reem" style="color:var(--text-muted);">اقتني الصورة </span>
+    </button>
+</div>
+
+<!-- Back button -->
+<div class="text-center mt-6 no-capture mb-10">
+    <a href="{{ `quotes` | relLangURL }}" class="btn-ink inline-flex gap-2">
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        عودة للاقتباسات
+    </a>
+</div>
+
+<script>
+    function handleQLike(btn) {
+        var countEl = document.getElementById('q-like-count');
+        var count = parseInt(countEl.textContent || '0');
+        var icon = btn.querySelector('i');
+        if (btn.dataset.liked) {
+            btn.dataset.liked = ''; count = Math.max(0, count - 1);
+            btn.querySelector('div').style.background = 'rgba(197,160,89,0.12)';
+            icon && icon.classList.remove('fill-current');
+        } else {
+            btn.dataset.liked = '1'; count += 1;
+            btn.querySelector('div').style.background = 'rgba(197,160,89,0.3)';
+            icon && icon.classList.add('fill-current');
+        }
+        countEl.textContent = count;
+    }
+    function handleQShare() {
+        if (navigator.share) { navigator.share({ title: document.title, url: location.href }); }
+        else { navigator.clipboard.writeText(location.href).then(() => alert('تم نسخ الرابط!')); }
+    }
+    function handleQCopy() {
+        var text = document.querySelector('.prose') ? document.querySelector('.prose').innerText : document.title;
+        navigator.clipboard.writeText(text).then(function () {
+            var d = document.querySelector('[onclick="handleQCopy()"] div');
+            if (d) { d.innerHTML = '<i data-lucide="check" class="w-4.5 h-4.5" style="color:var(--gold-antique);"></i>'; lucide.createIcons(); setTimeout(function () { d.innerHTML = '<i data-lucide="copy" class="w-4.5 h-4.5" style="color:var(--gold-antique);"></i>'; lucide.createIcons(); }, 2000); }
+        });
+    }
+</script>
+{{ end }}

@@ -1,0 +1,38 @@
+baseurl = "https://Beltagy-Mohamed.github.io/Beltagy-poetry-website/"
+languageCode = "ar"
+defaultContentLanguage = "ar"
+defaultContentLanguageInSubdir = false
+title = "بلتاجي الرمحي | ديوان الشعر النبطي والأدب الأصيل"
+enableRobotsTXT = true
+
+[sitemap]
+  changefreq = "weekly"
+  priority = 0.5
+  filename = "sitemap.xml"
+
+[module]
+  [module.hugoVersion]
+    extended = true
+    min = "0.112.0"
+
+[languages]
+  [languages.ar]
+    weight = 1
+    languageName = "العربية"
+    title = "بلتاجي الرمحي"
+    languagedirection = "rtl"
+    contentDir = "content/arabic"
+
+[params]
+  author = "بلتاجي الرمحي"
+  description = "ديوان الشاعر المهندس بلتاجي الرمحي. رحلة في أعماق الشعر النبطي، تراث قبيلة الرماح وبادية الفيوم، وصدى القوافي الليبية الأصيلة."
+  # الكلمات المفتاحية للبحث (SEO Keywords)
+  keywords = "بلتاجي الرمحي, قبيلة الرماح, الفيوم, الريان, شعراء بادية الفيوم, أدباء الفيوم, شعر شعبي ليبي, أولاد سليمان, أجدابيا, الشعر النبطي"
+  
+  # روابط التواصل الاجتماعي لمحركات البحث
+  twitter = "@Biltaji_mohamed"
+  email = "biltaji.mohamed@gmail.com"
+  linkedin = "https://www.linkedin.com/in/beltagy-/"
+
+[outputs]
+  home = ["HTML", "JSON"]

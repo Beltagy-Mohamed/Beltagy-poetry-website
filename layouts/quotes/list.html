@@ -1,0 +1,192 @@
+{{ define "title" }}{{ .Title }}{{ end }}
+{{ define "main" }}
+
+<!-- ====== HEADER ====== -->
+<div class="relative py-24 overflow-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] rounded-full pointer-events-none"
+        style="background: radial-gradient(ellipse, rgba(197,160,89,0.12), transparent); filter: blur(80px);"></div>
+    <div class="glow-orb w-[300px] h-[300px] -bottom-20 -right-20 opacity-[0.07]"
+        style="background: radial-gradient(circle, var(--gold-antique), transparent);"></div>
+    <div class="container mx-auto px-4 sm:px-6 text-center relative z-10">
+        <p class="text-xs font-black tracking-widest uppercase mb-5 font-ibm" style="color:var(--gold-antique);"
+            data-aos="fade-down">شذرات </p>
+        <h1 class="text-5xl md:text-7xl font-black font-reem mb-5" style="color:var(--ink-900);" data-aos="fade-up">{{
+            .Title }}</h1>
+        {{ with .Content }}
+        <div class="mt-6 font-ibm max-w-lg mx-auto" style="color:var(--ink-500);" data-aos="fade-up"
+            data-aos-delay="140">{{ . }}</div>
+        {{ end }}
+    </div>
+</div>
+
+<!-- ====== SMART FILTER ====== -->
+<div class="container mx-auto px-4 sm:px-6 max-w-6xl mb-12" data-aos="fade-up">
+    <div class="flex flex-wrap items-center justify-center gap-2 md:gap-4 p-2 rounded-2xl" id="filter-bar"
+        style="background:rgba(197,160,89,0.03); border:1px solid rgba(197,160,89,0.1);">
+        <button class="filter-btn active text-sm px-6 py-2.5" data-filter="all">الكل</button>
+        <button class="filter-btn text-sm px-6 py-2.5" data-filter="حديث">حديث</button>
+        <button class="filter-btn text-sm px-6 py-2.5" data-filter="قديم">قديم</button>
+    </div>
+</div>
+
+<!-- ====== MASONRY GRID ====== -->
+<div class="container mx-auto px-4 sm:px-6 pb-24 max-w-6xl">
+    <div class="masonry-grid" id="quotes-grid">
+        {{ range $i, $p := .Pages }}
+        <div class="masonry-item group" data-aos="fade-up" data-category="{{ $p.Params.category | default " all" }}"
+            data-title="{{ $p.Title | htmlEscape }}"
+            data-summary="{{ $p.Summary | plainify | truncate 200 | htmlEscape }}">
+
+            <div class="quote-card block p-6 md:p-8 relative overflow-hidden bg-[#2A1524]/40 backdrop-blur-sm rounded-2xl"
+                style="border: 1px solid rgba(197,160,89,0.15);">
+                <!-- Decorative large quote mark -->
+                <div class="absolute top-3 left-4 text-7xl font-serif leading-none select-none pointer-events-none"
+                    style="color:var(--gold-antique);opacity:0.07;">"</div>
+
+                <!-- Category badge (if set) -->
+                {{ with $p.Params.category }}
+                <span class="inline-block text-xs font-bold px-3 py-1 rounded-full mb-4"
+                    style="background:rgba(197,160,89,0.12); color:var(--gold-antique); border:1px solid var(--gold-border-color);">{{
+                    . }}</span>
+                {{ end }}
+
+                <!-- Title -->
+                <h2 class="font-black font-reem text-lg mb-2 leading-snug" style="color:var(--gold-antique);">{{
+                    $p.Title }}</h2>
+
+                <!-- Source -->
+                {{ with $p.Params.source }}
+                <p class="text-sm font-ibm mb-3 italic" style="color:var(--text-offwhite); opacity:0.7;">— {{ . }}</p>
+                {{ end }}
+
+                <!-- Summary text -->
+                <p class="font-ibm leading-loose text-sm line-clamp-5 mb-10"
+                    style="color:var(--text-offwhite); opacity:0.9;">
+                    {{ $p.Summary }}</p>
+
+                <!-- Custom Wax Seal -->
+                <div class="mb-4" style="margin-right: auto;">
+                    <img src="{{ "images/wax-seal-custom.png" | relURL }}" alt="Wax Seal" style="width:70px; height:auto; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.4));">
+                </div>
+
+                <!-- Footer: date + actions -->
+                <div class="mt-6 flex items-center justify-between">
+                    <!-- Like button (left) -->
+                    <button onclick="likeCard(event, this)" class="card-action-like flex items-center gap-1.5"
+                        title="إعجاب">
+                        <i data-lucide="heart" class="w-3.5 h-3.5" style="color:var(--gold-antique);"></i>
+                        <span class="like-count"
+                            style="font-size:0.75rem; font-weight:700; color:var(--gold-antique);">0</span>
+                    </button>
+                    <!-- Action buttons with labels (right) -->
+                    <div class="flex items-center gap-2">
+                        <button onclick="copyQuote(event, this)" data-text="{{ $p.Summary | plainify | htmlEscape }}"
+                            class="card-action-copy flex items-center gap-1" title="نسخ">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                            <span class="text-xs font-ibm">نسخ</span>
+                        </button>
+                        <button onclick="shareQuote(event, this)" data-url="{{ $p.Permalink }}"
+                            class="card-action-share flex items-center gap-1" title="مشاركة">
+                            <i data-lucide="share-2" class="w-3.5 h-3.5"></i>
+                            <span class="text-xs font-ibm">مشاركة</span>
+                        </button>
+                        <button
+                            onclick="downloadAsImage(this.closest('.quote-card'), 'quote-{{ $p.Title | urlize }}', this)"
+                            class="card-action-btn flex items-center gap-1" title="تحميل كصورة">
+                            <i data-lucide="image-down" class="w-3.5 h-3.5"></i>
+                            <span class="text-xs font-ibm">تحميل</span>
+                        </button>
+                        <!-- Read button (Added) -->
+                        <a href="{{ $p.Permalink }}" class="card-action-btn flex items-center gap-1">
+                            <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+                            <span class="text-xs font-ibm">اقرأ</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ end }}
+    </div>
+
+    <!-- Empty state if filter returns nothing -->
+    <p id="no-results" class="text-center py-16 font-ibm hidden" style="color:var(--ink-500);opacity:0.5;">
+        لا توجد اقتباسات في هذا التصنيف بعد.
+    </p>
+</div>
+
+<script>
+    /* ── Smart Filter ────────────────────────────────────── */
+    (function () {
+        var bar = document.getElementById('filter-bar');
+        var items = document.querySelectorAll('#quotes-grid .masonry-item');
+        var noRes = document.getElementById('no-results');
+        if (bar) {
+            bar.addEventListener('click', function (e) {
+                var btn = e.target.closest('button[data-filter]');
+                if (!btn) return;
+                bar.querySelectorAll('button').forEach(function (b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                var filter = btn.dataset.filter;
+                var visible = 0;
+                items.forEach(function (item) {
+                    var cat = item.dataset.category || 'all';
+                    var show = (filter === 'all' || cat === filter);
+                    item.style.display = show ? '' : 'none';
+                    if (show) visible++;
+                });
+                noRes.classList.toggle('hidden', visible > 0);
+            });
+        }
+    })();
+
+    /* ── Like (with counter) ────────────────────────────────── */
+    function likeCard(e, btn) {
+        e.preventDefault(); e.stopPropagation();
+        var liked = btn.dataset.liked;
+        var countEl = btn.querySelector('.like-count');
+        var count = parseInt(countEl ? countEl.textContent : '0');
+        var icon = btn.querySelector('i');
+        if (liked) {
+            btn.dataset.liked = '';
+            btn.style.background = '';
+            btn.style.borderColor = '';
+            icon && icon.classList.remove('fill-current');
+            if (countEl) { count = Math.max(0, count - 1); countEl.textContent = count; }
+        } else {
+            btn.dataset.liked = '1';
+            btn.style.background = 'rgba(197,160,89,0.2)';
+            btn.style.borderColor = 'var(--gold-antique)';
+            icon && icon.classList.add('fill-current');
+            if (countEl) { count++; countEl.textContent = count; }
+        }
+    }
+
+    /* ── Copy quote text ─────────────────────────────────── */
+    function copyQuote(e, btn) {
+        e.preventDefault(); e.stopPropagation();
+        var text = btn.dataset.text;
+        navigator.clipboard.writeText(text).then(function () {
+            var orig = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> تم!';
+            lucide.createIcons();
+            setTimeout(function () { btn.innerHTML = orig; lucide.createIcons(); }, 2000);
+        });
+    }
+
+    /* ── Share Quote ─────────────────────────────────────── */
+    function shareQuote(e, btn) {
+        e.preventDefault(); e.stopPropagation();
+        var url = btn.dataset.url || location.href;
+        if (navigator.share) {
+            navigator.share({ title: document.title, url: url });
+        } else {
+            navigator.clipboard.writeText(url).then(function () {
+                var orig = btn.innerHTML;
+                btn.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> تم!';
+                lucide.createIcons();
+                setTimeout(function () { btn.innerHTML = orig; lucide.createIcons(); }, 2000);
+            });
+        }
+    }
+</script>
+{{ end }}

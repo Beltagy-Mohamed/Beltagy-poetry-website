@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://Beltagy-Mohamed.github.io/Beltagy-poetry-website/sitemap.xml

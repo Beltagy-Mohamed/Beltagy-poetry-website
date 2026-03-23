@@ -1,0 +1,238 @@
+{{ define "title" }}{{ .Title }}{{ end }}
+{{ define "main" }}
+
+<style>
+</style>
+
+<!-- CAPTURE AREA: Wraps Title and Poem Card -->
+<div id="poem-capture-wrapper" class="py-12">
+  <!-- Poem Header -->
+  <div class="relative pt-16 pb-10 overflow-hidden text-center z-10">
+    <div class="absolute inset-0 pointer-events-none"
+      style="background: radial-gradient(ellipse at 50% -30%, rgba(212,144,58,0.10) 0%, transparent 70%);"></div>
+    <div class="container mx-auto px-4 sm:px-6 max-w-3xl relative z-10">
+      <h1 class="text-4xl md:text-5xl font-black font-reem leading-tight mb-5" style="color:var(--gold-antique);"
+        data-aos="fade-up">{{ .Title }}</h1>
+
+      {{ if .Params.audio_url }}
+      <div class="mt-6 no-capture" data-aos="fade-up" data-aos-delay="120">
+        <button onclick="toggleAudio()"
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-reem font-bold transition-all"
+          style="border:1.5px solid rgba(212,144,58,0.4); color:var(--gold-antique); background:rgba(212,144,58,0.05);">
+          <i data-lucide="play" class="w-4 h-4" id="play-icon"></i>
+          <i data-lucide="pause" class="w-4 h-4 hidden" id="pause-icon"></i>
+          استمع للقصيدة
+        </button>
+        <audio id="poem-audio" class="hidden">
+          <source src="{{ .Params.audio_url }}" type="audio/mpeg">
+        </audio>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+
+  <!-- Parchment Body -->
+  <div class="container mx-auto px-4 sm:px-6 pb-20 flex justify-center">
+    <div id="poem-export-wrapper" class="relative w-full max-w-4xl">
+      <div id="poem-export" class="perspective-1000 p-1">
+        <div class="relative overflow-visible poem-glass-card shadow-2xl" style="position:relative; overflow:visible;">
+
+          <div id="poem-container" class="font-zahey relative z-10 py-16 px-2 md:px-4">
+            <div class="poetry-content-wrapper">
+              {{ .Content }}
+            </div>
+          </div>
+
+          <style>
+            /* القضاء على اللون الأحمر في الخط الملون (COLRv1) */
+            .poetry-content-wrapper td,
+            .poetry-content-wrapper p,
+            .font-zahey {
+              font-family: 'Poppins', 'IBM Plex Sans Arabic', sans-serif !important;
+              color: #C5A059 !important;
+              fill: #C5A059 !important;
+              /* كسر باليتة الألوان المدمجة في الخط */
+              font-palette: --gold-palette !important;
+              -webkit-text-fill-color: #C5A059 !important;
+            }
+
+            @font-palette-values --gold-palette {
+              font-family: 'Poppins';
+              base-palette: 0;
+              /* جرب 0 أو 1 حسب إصدار الخط عندك */
+              override-colors: 0 #C5A059, 1 #C5A059;
+            }
+
+            /* المسطرة (Desktop & Tablet) - v5 الترا-وايد مع النجوم */
+            .poetry-content-wrapper table {
+              width: 100% !important;
+              table-layout: fixed !important;
+              border-spacing: 5rem 0 !important;
+              /* توازن نهائي فسيح وأنيق بين الأشطر */
+              direction: rtl !important;
+              margin: 1.5rem auto !important;
+              border-collapse: separate !important;
+            }
+
+            .poetry-content-wrapper td {
+              width: 50% !important;
+              text-align: justify !important;
+              text-align-last: justify !important;
+              text-justify: inter-word !important;
+              word-spacing: -0.08em !important;
+              line-height: 2 !important;
+              font-size: 1.65rem !important;
+              border: none !important;
+              padding: 0.8rem 0 !important;
+              vertical-align: top !important;
+              position: relative !important;
+            }
+
+            /* إضافة النجوم الفاصلة بين الشطرين */
+            .poetry-content-wrapper td:first-child::after {
+              content: '✻ ✻' !important;
+              position: absolute !important;
+              left: -2.5rem !important;
+              /* منتصف المسافة 5rem */
+              top: 50% !important;
+              transform: translate(-50%, -50%) !important;
+              font-size: 1.2rem !important;
+              color: #C5A059 !important;
+              opacity: 0.5 !important;
+              pointer-events: none !important;
+            }
+
+            /* المسطرة في الموبايل (بدون تداخل) */
+            @media (max-width: 768px) {
+              .poetry-content-wrapper table {
+                border-spacing: 1rem 0 !important;
+              }
+
+              .poetry-content-wrapper td {
+                font-size: 1.25rem !important;
+                padding: 0.6rem 0.3rem !important;
+                margin-bottom: 0.8rem !important;
+                text-align: justify !important;
+                text-align-last: center !important;
+              }
+            }
+
+            /* إخفاء أي زوائد */
+            .poetry-content-wrapper hr,
+            .poetry-content-wrapper th {
+              display: none !important;
+            }
+          </style>
+
+          <!-- Custom Scroll Wax Seal (Bottom) - Perfectly Centered on Border -->
+          <div style="position:absolute; bottom:0; left:50%; transform:translate(-50%, 50%); z-index:50;">
+            <img src="{{ "images/wax-seal-custom.png" | relURL }}" alt="Wax Seal"
+              style="width:120px; height:auto; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Action Bar (Like counter + Share + Download) beneath poem -->
+<div class="container mx-auto px-4 sm:px-6 max-w-3xl no-capture">
+  <div class="flex items-center justify-center gap-6 py-10" style="padding-top:4rem;">
+    <!-- Like with counter -->
+    <button id="poem-like-btn" onclick="handlePoemLike(this)"
+      class="flex flex-col items-center gap-1.5 transition-all hover:scale-110" title="إعجاب">
+      <div class="w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
+        style="background:rgba(197,160,89,0.12); border:1px solid var(--gold-border-color);">
+        <i data-lucide="heart" class="w-5 h-5 heart-icon" style="color:var(--gold-antique);"></i>
+      </div>
+      <span id="poem-like-count" class="like-counter text-xs font-bold" style="color:var(--gold-antique);"
+        data-count="0">0</span>
+    </button>
+    <!-- Share -->
+    <button onclick="handleFABShare()" class="flex flex-col items-center gap-1.5 transition-all hover:scale-110"
+      title="مشاركة">
+      <div class="w-12 h-12 rounded-full flex items-center justify-center"
+        style="background:rgba(197,160,89,0.1); border:1px solid var(--gold-border-color);">
+        <i data-lucide="share-2" class="w-5 h-5" style="color:var(--gold-antique);"></i>
+      </div>
+      <span class="text-xs font-reem" style="color:var(--text-muted);">مشاركة</span>
+    </button>
+    <!-- Copy -->
+    <button onclick="copyPoem(this)" class="flex flex-col items-center gap-1.5 transition-all hover:scale-110"
+      title="نسخ">
+      <div class="w-12 h-12 rounded-full flex items-center justify-center"
+        style="background:rgba(197,160,89,0.1); border:1px solid var(--gold-border-color);">
+        <i data-lucide="copy" class="w-5 h-5" style="color:var(--gold-antique);"></i>
+      </div>
+      <span class="text-xs font-reem" style="color:var(--text-muted);">نسخ</span>
+    </button>
+    <!-- Download Image -->
+    <button onclick="downloadAsImage('#poem-capture-wrapper', '{{ .Title | urlize }}', this)"
+      class="flex flex-col items-center gap-1.5 transition-all hover:scale-110" title="تحميل كصورة">
+      <div class="w-12 h-12 rounded-full flex items-center justify-center"
+        style="background:rgba(197,160,89,0.1); border:1px solid var(--gold-border-color);">
+        <i data-lucide="image-down" class="w-5 h-5" style="color:var(--gold-antique);"></i>
+      </div>
+      <span class="text-xs font-reem" style="color:var(--text-muted);">اقتني الصورة</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  function toggleAudio() {
+    var a = document.getElementById('poem-audio');
+    var play = document.getElementById('play-icon');
+    var pause = document.getElementById('pause-icon');
+    if (!a) return;
+    if (a.paused) { a.play(); play && play.classList.add('hidden'); pause && pause.classList.remove('hidden'); }
+    else { a.pause(); play && play.classList.remove('hidden'); pause && pause.classList.add('hidden'); }
+  }
+
+  function handlePoemLike(btn) {
+    var countEl = document.getElementById('poem-like-count');
+    var count = parseInt(countEl.dataset.count || '0');
+    var liked = btn.dataset.liked;
+    if (liked) {
+      btn.dataset.liked = '';
+      count = Math.max(0, count - 1);
+      btn.querySelector('div').style.background = 'rgba(197,160,89,0.12)';
+      btn.querySelector('i').classList.remove('fill-current');
+    } else {
+      btn.dataset.liked = '1';
+      count += 1;
+      btn.querySelector('div').style.background = 'rgba(197,160,89,0.25)';
+      btn.querySelector('i').classList.add('fill-current');
+    }
+    countEl.dataset.count = count;
+    countEl.textContent = count;
+  }
+
+  function handleFABShare() {
+    if (navigator.share) { navigator.share({ title: document.title, url: location.href }); }
+    else { navigator.clipboard.writeText(location.href).then(() => alert('تم نسخ الرابط!')); }
+  }
+
+  function copyPoem(btn) {
+    var text = document.getElementById('poem-container').innerText;
+    navigator.clipboard.writeText(text).then(function () {
+      var orig = btn.querySelector('div').innerHTML;
+      btn.querySelector('div').innerHTML = '<i data-lucide="check" class="w-5 h-5" style="color:var(--gold-antique);"></i>';
+      lucide.createIcons();
+      setTimeout(function () { btn.querySelector('div').innerHTML = orig; lucide.createIcons(); }, 2000);
+    });
+  }
+</script>
+
+<script>
+  // سكريبت التدخل السريع لفرض اللون الذهبي وتكسير أي كود عنيد
+  document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(function () {
+      var poemElements = document.querySelectorAll('#poem-container .font-zahey td, #poem-container .font-zahey p, #poem-container .font-zahey span');
+      poemElements.forEach(function (el) {
+        el.style.setProperty('color', '#C5A059', 'important');
+        el.style.setProperty('-webkit-text-fill-color', '#C5A059', 'important');
+      });
+    }, 100); // بيشتغل بعد ثانية من التحميل عشان يتأكد إن كل حاجة خلصت
+  });
+</script>
+{{ end }}

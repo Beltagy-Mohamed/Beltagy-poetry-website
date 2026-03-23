@@ -1,0 +1,138 @@
+{{ define "title" }}{{ .Title }}{{ end }}
+{{ define "main" }}
+
+<!-- Header -->
+<div id="thought-capture-area" class="py-12">
+    <div class="relative pt-16 pb-10 overflow-hidden text-center z-10">
+        <div class="absolute inset-0 pointer-events-none"
+            style="background: radial-gradient(ellipse at 50% -10%, rgba(45,158,163,0.08) 0%, transparent 60%);"></div>
+        <div class="container mx-auto px-4 sm:px-6 max-w-2xl relative z-10">
+            <p class="text-xs font-black tracking-widest uppercase mb-5 font-reem" style="color:var(--gold-antique);"
+                data-aos="fade-down">خاطرة</p>
+            <h1 class="text-4xl md:text-5xl font-black font-reem leading-tight mb-5" style="color:var(--gold-antique);"
+                data-aos="fade-up">{{ .Title }}</h1>
+            <div class="flex items-center justify-center gap-3 text-sm font-ibm"
+                style="color:var(--ink-500);opacity:0.7;" data-aos="fade-up">
+                {{ if .Params.mood }}
+                <span class="inline-flex items-center gap-1.5 font-bold" style="color:var(--gold-antique);">
+                    <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i>{{ .Params.mood }}
+                </span>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Body -->
+    <div class="container mx-auto px-4 sm:px-6 pb-20 flex justify-center">
+        <div data-aos="fade-up"
+            class="thought-card-large relative glass-card p-12 rounded-[2.5rem] w-full max-w-2xl mx-auto overflow-visible"
+            style="border: 1px solid rgba(197,160,89,0.15); background: rgba(15, 23, 42, 0.4);">
+            <!-- Subtle top gold bar -->
+            <div class="absolute top-0 left-0 right-0 h-0.5 rounded-full"
+                style="background:linear-gradient(90deg,transparent,var(--gold-antique),transparent);"></div>
+            <!-- Ambient orb -->
+            <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full pointer-events-none"
+                style="background:radial-gradient(circle,rgba(197,160,89,0.08),transparent);"></div>
+
+            <div class="prose prose-2xl mx-auto text-right leading-loose relative z-10"
+                style="color: #F5F5DC; font-family: 'Cairo', sans-serif; font-size: 1.75rem; font-weight: 500;">
+                <style>
+                    .prose hr {
+                        display: none !important;
+                    }
+
+                    .prose p {
+                        margin-bottom: 2rem !important;
+                    }
+
+                    .prose * {
+                        color: #F5F5DC !important;
+                    }
+                </style>
+                {{ .Content }}
+            </div>
+
+            <!-- Custom Wax Seal -->
+            <div class="flex justify-center mt-12">
+                <img src="{{ " images/wax-seal-custom.png" | relURL }}" alt="Wax Seal"
+                    style="width:100px; height:auto; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Action Buttons -->
+<div class="flex items-center justify-center gap-5 mt-8 mb-24 no-capture" data-aos="fade-up">
+    <button onclick="handleSingleLike(this)" id="single-like-btn"
+        class="flex flex-col items-center gap-1 transition-all hover:scale-110" title="إعجاب">
+        <div class="w-11 h-11 rounded-full flex items-center justify-center shadow-md"
+            style="background:rgba(197,160,89,0.12); border:1px solid var(--gold-border-color);">
+            <i data-lucide="heart" class="w-4.5 h-4.5" style="color:var(--gold-antique);"></i>
+        </div>
+        <span id="single-like-count" class="text-xs font-bold" style="color:var(--gold-antique);">0</span>
+    </button>
+    <button onclick="handleSingleShare()" class="flex flex-col items-center gap-1 transition-all hover:scale-110"
+        title="مشاركة">
+        <div class="w-11 h-11 rounded-full flex items-center justify-center"
+            style="background:rgba(197,160,89,0.1); border:1px solid rgba(197,160,89,0.35);">
+            <i data-lucide="share-2" class="w-4.5 h-4.5" style="color:var(--gold-antique);"></i>
+        </div>
+        <span class="text-xs font-reem" style="color:var(--text-muted);">مشاركة</span>
+    </button>
+    <button onclick="handleSingleCopy()" class="flex flex-col items-center gap-1 transition-all hover:scale-110"
+        title="نسخ">
+        <div class="w-11 h-11 rounded-full flex items-center justify-center"
+            style="background:rgba(197,160,89,0.1); border:1px solid var(--gold-border-color);">
+            <i data-lucide="copy" class="w-4.5 h-4.5" style="color:var(--gold-antique);"></i>
+        </div>
+        <span class="text-xs font-reem" style="color:var(--text-muted);">نسخ</span>
+    </button>
+    <button onclick="downloadAsImage('#thought-capture-area', 'thought-{{ .Title | urlize }}', this)"
+        class="flex flex-col items-center gap-1 transition-all hover:scale-110" title="تحميل كصورة">
+        <div class="w-11 h-11 rounded-full flex items-center justify-center"
+            style="background:rgba(197,160,89,0.1); border:1px solid var(--gold-border-color);">
+            <i data-lucide="image-down" class="w-4.5 h-4.5" style="color:var(--gold-antique);"></i>
+        </div>
+        <span class="text-xs font-reem" style="color:var(--text-muted);">اقتني الصورة
+    </button>
+</div>
+
+<!-- Back button -->
+<div class="text-center mt-6 no-capture mb-10">
+    <a href="{{ `thoughts` | relLangURL }}" class="btn-ink inline-flex gap-2">
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        عودة للخواطر
+    </a>
+</div>
+
+<script>
+    function handleSingleLike(btn) {
+        var countEl = document.getElementById('single-like-count');
+        var count = parseInt(countEl.textContent || '0');
+        var icon = btn.querySelector('i');
+        if (btn.dataset.liked) {
+            btn.dataset.liked = '';
+            count = Math.max(0, count - 1);
+            btn.querySelector('div').style.background = 'rgba(197,160,89,0.12)';
+            icon && icon.classList.remove('fill-current');
+        } else {
+            btn.dataset.liked = '1';
+            count += 1;
+            btn.querySelector('div').style.background = 'rgba(197,160,89,0.3)';
+            icon && icon.classList.add('fill-current');
+        }
+        countEl.textContent = count;
+    }
+    function handleSingleShare() {
+        if (navigator.share) { navigator.share({ title: document.title, url: location.href }); }
+        else { navigator.clipboard.writeText(location.href).then(() => { alert('تم نسخ الرابط!'); }); }
+    }
+    function handleSingleCopy() {
+        var text = document.querySelector('.prose') ? document.querySelector('.prose').innerText : document.title;
+        navigator.clipboard.writeText(text).then(function () {
+            var btn = document.querySelector('[onclick="handleSingleCopy()"] div');
+            if (btn) { btn.innerHTML = '<i data-lucide="check" class="w-4.5 h-4.5" style="color:var(--gold-antique);"></i>'; lucide.createIcons(); setTimeout(function () { btn.innerHTML = '<i data-lucide="copy" class="w-4.5 h-4.5" style="color:var(--gold-antique);"></i>'; lucide.createIcons(); }, 2000); }
+        });
+    }
+</script>
+{{ end }}
