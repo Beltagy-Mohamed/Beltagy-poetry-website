@@ -4,6 +4,8 @@ defaultContentLanguage = "ar"
 defaultContentLanguageInSubdir = false
 title = "بلتاجي الرمحي | ديوان الشعر النبطي والأدب الأصيل"
 enableRobotsTXT = true
+canonifyURLs = true
+relativeURLs = true
 
 [sitemap]
   changefreq = "weekly"

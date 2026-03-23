@@ -1,26 +1,3 @@
-sg.className = 'mt-4 text-sm font-medium text-emerald-500';
-                    form.reset();
-                } else {
-                    msg.textContent = '⚠️ حدث خطأ، حاول مرةً أخرى.';
-                    msg.className = 'mt-4 text-sm font-medium text-red-400';
-                }
-            } catch {
-                msg.textContent = '⚠️ تعذّر الاتصال بالشبكة.';
-                msg.className = 'mt-4 text-sm font-medium text-red-400';
-            }
-            btn.disabled = false;
-            btn.textContent = 'اشترك الآن';
-            msg.classList.remove('hidden');
-            setTimeout(() => msg.classList.add('hidden'), 5000);
-        }
-
-        // Search index
-        window.searchIndexUrl = "{{ `index.json` | relURL }}";
-    </script>
-    <script src="{{ `js/search.js` | relURL }}"></script>
-</body>
-
-=======
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" class="light">
 
@@ -36,8 +13,8 @@ sg.className = 'mt-4 text-sm font-medium text-emerald-500';
     <meta property="og:description" content="{{ site.Params.description }}">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#fdf8ee">
-    <link rel="icon" type="image/svg+xml" href="{{ `favicon.svg` | relURL }}">
-    <link rel="alternate icon" href="{{ `favicon.ico` | relURL }}">
+    <link rel="icon" type="image/png" href="{{ `images/logo.png` | relURL }}">
+    <link rel="apple-touch-icon" href="{{ `images/logo.png` | relURL }}">
 
 
     <!-- Schema.org -->
@@ -98,14 +75,14 @@ sg.className = 'mt-4 text-sm font-medium text-emerald-500';
     <header class="glass-nav">
         <div class="container mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
 
-            <!-- Logo / Site Title -->
-            <a href="{{ site.Home.Permalink }}" class="flex items-center gap-3 shrink-0 group">
-                <div class="relative w-12 h-12 shrink-0">
-                    <img src="{{ `favicon.svg` | relURL }}" alt="شعار بلتاجي الرمحي"
-                        class="w-full h-full object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3">
+            <a href="{{ site.Home.Permalink }}" class="flex items-center gap-3 shrink-0 group" style="display:flex!important; align-items:center!important; gap:0.75rem!important; text-decoration:none!important;">
+                <div class="logo-container" 
+                    style="width: 44px!important; height: 44px!important; min-width: 44px!important; min-height: 44px!important; border-radius: 50%!important; overflow: hidden!important; border: 2px solid #C5A059!important; position: relative!important; background: #fdf8ee!important; box-shadow: 0 2px 8px rgba(0,0,0,0.2)!important; clip-path: circle(50%); -webkit-clip-path: circle(50%); cursor: pointer!important;">
+                    <img src="{{ `images/logo.png` | relURL }}" alt="Logo"
+                        style="width: 100%!important; height: 100%!important; object-fit: cover!important; display: block!important; border-radius: 50%!important;">
                 </div>
-                <span class="font-bold text-xl font-reem hidden sm:block calligraphy-title"
-                    style="font-size:1.3rem;">بلتاجي الرمحي</span>
+                <span class="font-bold font-reem hidden sm:block calligraphy-title"
+                    style="font-size: 1.15rem!important; color: #C5A059!important; font-weight: 700!important;">بلتاجي الرمحي</span>
             </a>
 
             <!-- Nav Links (Desktop) -->
@@ -125,18 +102,18 @@ sg.className = 'mt-4 text-sm font-medium text-emerald-500';
             </nav>
 
             <!-- Right Controls -->
-            <div class="flex items-center gap-1">
-                <button id="search-toggle" class="icon-btn" aria-label="بحث">
-                    <i data-lucide="search" class="w-4.5 h-4.5"></i>
+            <div class="flex items-center gap-2" style="display:flex; align-items:center; gap:0.5rem;">
+                <button id="search-toggle" class="icon-btn" aria-label="بحث" style="background:none; border:none; cursor:pointer; color:var(--text-offwhite, #fdf8ee); padding:4px;">
+                    <i data-lucide="search" class="w-5 h-5" style="width:20px; height:20px;"></i>
                 </button>
-                <button id="theme-toggle" class="icon-btn" aria-label="تغيير المظهر">
-                    <i data-lucide="moon" class="w-4.5 h-4.5 dark:hidden"></i>
-                    <i data-lucide="sun" class="w-4.5 h-4.5 hidden dark:block text-amber-400"></i>
+                <button id="theme-toggle" class="icon-btn" aria-label="تغيير المظهر" style="background:none; border:none; cursor:pointer; color:var(--text-offwhite, #fdf8ee); padding:4px;">
+                    <i data-lucide="moon" class="w-5 h-5 dark:hidden" style="width:20px; height:20px;"></i>
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block text-amber-400" style="width:20px; height:20px; color:#fbbf24;"></i>
                 </button>
                 <!-- Mobile Hamburger -->
-                <button id="mobile-menu-toggle" class="icon-btn md:hidden" aria-label="القائمة">
-                    <i data-lucide="menu" class="w-5 h-5" id="hamburger-icon"></i>
-                    <i data-lucide="x" class="w-5 h-5 hidden" id="close-menu-icon"></i>
+                <button id="mobile-menu-toggle" class="mobile-btn md:hidden" aria-label="القائمة" style="background:none; border:none; cursor:pointer; color:var(--text-offwhite, #fdf8ee); padding:4px;">
+                    <i data-lucide="menu" class="w-6 h-6" id="hamburger-icon" style="width:24px; height:24px;"></i>
+                    <i data-lucide="x" class="w-6 h-6 hidden" id="close-menu-icon" style="width:24px; height:24px;"></i>
                 </button>
             </div>
         </div>

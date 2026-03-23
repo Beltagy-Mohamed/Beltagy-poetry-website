@@ -102,18 +102,70 @@
               pointer-events: none !important;
             }
 
-            /* المسطرة في الموبايل (بدون تداخل) */
-            @media (max-width: 768px) {
+            /* المسطرة التلقائية في الموبايل والتابلت الشاملة - أولوية قصوى */
+            @media (max-width: 850px) {
+              .poetry-content-wrapper, #poem-container, #poem-export, #poem-capture-wrapper {
+                width: 100% !important;
+                max-width: 100vw !important;
+                padding-left: 0.25rem !important;
+                padding-right: 0.25rem !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                overflow-x: hidden !important;
+              }
+              
+              .poetry-content-wrapper table,
+              .poetry-content-wrapper tbody,
+              .poetry-content-wrapper tr,
+              .poetry-content-wrapper td {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                border: none !important;
+                background: none !important;
+                box-sizing: border-box !important;
+                float: none !important;
+              }
+  
               .poetry-content-wrapper table {
-                border-spacing: 1rem 0 !important;
+                border-spacing: 0 !important;
+                margin: 0 !important;
+                table-layout: auto !important;
               }
 
               .poetry-content-wrapper td {
                 font-size: 1.25rem !important;
-                padding: 0.6rem 0.3rem !important;
-                margin-bottom: 0.8rem !important;
-                text-align: justify !important;
+                padding: 0.75rem 0.5rem !important;
+                text-align: center !important;
                 text-align-last: center !important;
+                line-height: 1.6 !important;
+                word-break: keep-all !important;
+                white-space: normal !important;
+                min-height: auto !important;
+                height: auto !important;
+              }
+
+              /* إضافة مسافة كافية بعد العجز للفصل بين الأبيات */
+              .poetry-content-wrapper td:nth-child(even) {
+                margin-bottom: 2.5rem !important;
+                padding-bottom: 1.5rem !important;
+                border-bottom: 1px solid rgba(197,160,89,0.2) !important;
+              }
+              
+              /* إخفاء علامات النجوم والزوائد */
+              .poetry-content-wrapper td:first-child::after {
+                display: none !important;
+              }
+            }
+            
+            /* تعديلات التابلت المتوسط (Landscape mobile / small tablets) */
+            @media (min-width: 641px) and (max-width: 1024px) {
+              .poetry-content-wrapper table {
+                border-spacing: 2rem 0 !important;
+              }
+              .poetry-content-wrapper td {
+                font-size: 1.4rem !important;
+                line-height: 1.8 !important;
               }
             }
 
