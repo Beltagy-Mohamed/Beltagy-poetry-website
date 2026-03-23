@@ -1,3 +1,26 @@
+sg.className = 'mt-4 text-sm font-medium text-emerald-500';
+                    form.reset();
+                } else {
+                    msg.textContent = '⚠️ حدث خطأ، حاول مرةً أخرى.';
+                    msg.className = 'mt-4 text-sm font-medium text-red-400';
+                }
+            } catch {
+                msg.textContent = '⚠️ تعذّر الاتصال بالشبكة.';
+                msg.className = 'mt-4 text-sm font-medium text-red-400';
+            }
+            btn.disabled = false;
+            btn.textContent = 'اشترك الآن';
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 5000);
+        }
+
+        // Search index
+        window.searchIndexUrl = "{{ `index.json` | relURL }}";
+    </script>
+    <script src="{{ `js/search.js` | relURL }}"></script>
+</body>
+
+=======
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" class="light">
 
@@ -190,10 +213,10 @@
                     </p>
                     <form action="https://formspree.io/f/xqeypvyd" method="POST"
                         onsubmit="handleNewsletterSubmit(event, this);"
-                        class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                        class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto px-4 sm:px-0">
                         <input type="email" name="email" required autocomplete="email" placeholder="بريدك الإلكتروني..."
-                            class="flex-grow px-5 py-3 rounded-xl outline-none text-sm text-right transition placeholder-opacity-50"
-                            style="background:rgba(255,255,255,0.05); border:1px solid rgba(197,160,89,0.2); color:var(--text-offwhite);">
+                            class="flex-grow px-5 py-4 sm:py-3 rounded-xl outline-none text-base sm:text-sm text-right transition placeholder-opacity-60 shadow-inner"
+                            style="background:rgba(255,255,255,0.07); border:1px solid rgba(197,160,89,0.3); color:var(--text-offwhite);">
                         <!-- honeypot anti-spam -->
                         <input type="text" name="_gotcha" style="display:none" aria-hidden="true" tabindex="-1">
                         <input type="hidden" name="_subject" value="مشترك جديد في ديوان بلتاجي الرمحي">
@@ -215,7 +238,8 @@
                     سواء كان لديك فكرة تشاركني إياها، أو
                     بيت من الشعر، أو مجرد إلقاء التحية.. فأبواب التواصل مشرعة دائماً وبكل ود.
                 </p>
-                <div class="flex items-center justify-center gap-6" style="color:var(--text-ambient);">
+                <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-8 mt-4"
+                    style="color:var(--text-ambient);">
                     <a href="mailto:beltagy237@gmail.com"
                         class="hover:text-white transition-colors flex items-center gap-2 font-ibm text-sm">
                         <i data-lucide="mail" class="w-4.5 h-4.5" style="color:var(--gold-antique);"></i>
