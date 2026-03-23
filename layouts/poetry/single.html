@@ -37,7 +37,7 @@
       <div id="poem-export" class="perspective-1000 p-1">
         <div class="relative overflow-visible poem-glass-card shadow-2xl" style="position:relative; overflow:visible;">
 
-          <div id="poem-container" class="font-zahey relative z-10 py-16 px-2 md:px-4">
+          <div id="poem-container" class="font-zahey relative z-10 pt-16 pb-32 px-2 md:px-4">
             <div class="poetry-content-wrapper">
               {{ .Content }}
             </div>
@@ -145,11 +145,11 @@
                 height: auto !important;
               }
 
-              /* إضافة مسافة كافية بعد العجز للفصل بين الأبيات */
+              /* إضافة مسافة كافية قبل العجز للفصل البصري */
               .poetry-content-wrapper td:nth-child(even) {
                 margin-bottom: 2.5rem !important;
-                padding-bottom: 1.5rem !important;
-                border-bottom: 1px solid rgba(197,160,89,0.2) !important;
+                padding-bottom: 1rem !important;
+                border-bottom: none !important;
               }
               
               /* إخفاء علامات النجوم والزوائد */
@@ -192,12 +192,11 @@
   <div class="flex items-center justify-center gap-6 py-10" style="padding-top:4rem;">
     <!-- Like with counter -->
     <button id="poem-like-btn" onclick="handlePoemLike(this)"
-      class="flex flex-col items-center gap-1.5 transition-all hover:scale-110" title="إعجاب">
-      <div class="w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
-        style="background:rgba(197,160,89,0.12); border:1px solid var(--gold-border-color);">
-        <i data-lucide="heart" class="w-5 h-5 heart-icon" style="color:var(--gold-antique);"></i>
+      class="flex flex-col items-center gap-2 transition-all hover:scale-110 group" title="إعجاب">
+      <div class="flex items-center justify-center transition-all duration-300 group-hover:drop-shadow-[0_0_12px_rgba(197,160,89,0.5)]">
+        <i data-lucide="heart" id="poem-heart-icon" class="w-10 h-10 transition-all duration-300" style="color:var(--gold-antique); stroke-width:1.5;"></i>
       </div>
-      <span id="poem-like-count" class="like-counter text-xs font-bold" style="color:var(--gold-antique);"
+      <span id="poem-like-count" class="like-counter text-sm font-bold" style="color:var(--gold-antique);"
         data-count="0">0</span>
     </button>
     <!-- Share -->
@@ -244,16 +243,21 @@
     var countEl = document.getElementById('poem-like-count');
     var count = parseInt(countEl.dataset.count || '0');
     var liked = btn.dataset.liked;
+    var icon = document.getElementById('poem-heart-icon');
     if (liked) {
       btn.dataset.liked = '';
       count = Math.max(0, count - 1);
-      btn.querySelector('div').style.background = 'rgba(197,160,89,0.12)';
-      btn.querySelector('i').classList.remove('fill-current');
+      icon.style.color = 'var(--gold-antique)';
+      icon.classList.remove('fill-current');
+      icon.style.fill = 'none';
+      icon.style.filter = 'none';
     } else {
       btn.dataset.liked = '1';
       count += 1;
-      btn.querySelector('div').style.background = 'rgba(197,160,89,0.25)';
-      btn.querySelector('i').classList.add('fill-current');
+      icon.style.color = '#FFD700'; // Bright gold
+      icon.classList.add('fill-current');
+      icon.style.fill = '#FFD700';
+      icon.style.filter = 'drop-shadow(0 0 12px rgba(255, 215, 0, 0.8))';
     }
     countEl.dataset.count = count;
     countEl.textContent = count;

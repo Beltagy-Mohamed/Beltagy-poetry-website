@@ -45,6 +45,7 @@ window.downloadAsImage = async function (selectorOrEl, filename, button) {
             allowTaint: true,
             backgroundColor: "#1A0D16", // Force velvet background
             logging: true,
+            windowWidth: 1200, // Force desktop width for horizontal layout (صدر وعجز)
             onclone: function (clonedDoc) {
                 // Manually inject royal colors into the cloned document's root
                 const root = clonedDoc.documentElement;
@@ -68,27 +69,12 @@ window.downloadAsImage = async function (selectorOrEl, filename, button) {
                     // Deep force visibility and fix Arabic alignment in screenshots
                     const target = clonedDoc.getElementById('poem-export');
                     if (target) {
-                        // Fix stars displacement: pseudo-elements are unstable in html2canvas
-                        // We hide the pseudo-element and inject a real one in the center
-                        target.querySelectorAll('.poetry-content-wrapper td:first-child').forEach(td => {
-                            const star = clonedDoc.createElement('span');
-                            star.innerText = '✻ ✻';
-                            star.style.position = 'absolute';
-                            star.style.left = 'calc(100% + 2.5rem)';
-                            star.style.top = '50%';
-                            star.style.transform = 'translate(-50%, -50%)';
-                            star.style.color = '#C5A059';
-                            star.style.fontSize = '1.4rem';
-                            star.style.opacity = '0.6';
-                            star.style.whiteSpace = 'nowrap';
-                            star.className = 'screenshot-star';
-                            td.appendChild(star);
-                        });
+                        const container = target.querySelector('#poem-container');
+                        if (container) {
+                            container.style.paddingBottom = '180px'; // Give ample space for the seal so it doesn't overlap text
+                        }
 
-                        // Add a style to hide pseudo-stars in clone
-                        const style = clonedDoc.createElement('style');
-                        style.innerHTML = '.poetry-content-wrapper td::after { content: none !important; }';
-                        clonedDoc.head.appendChild(style);
+                        // Removed redundant star generation logic; html2canvas handles the pseudo-element natively.
 
                         target.querySelectorAll('*').forEach(el => {
                             el.style.opacity = '1';
