@@ -1,11 +1,21 @@
-# Generic .gitignore for Hugo
-node_modules/
+# Hugo Output
 public/
 resources/
+_gen/
 .hugo_build.lock
 hugo_stats.json
+
+# Dependencies
+node_modules/
+
+# OS Files
 .DS_Store
+Thumbs.db
 *.pyc
 __pycache__/
+
+# Local Env & Logs
+.env
+*.log
 tmp/
 .temp/
