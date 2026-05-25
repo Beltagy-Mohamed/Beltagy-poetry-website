@@ -1,0 +1,119 @@
+{{ define "title" }}{{ .Title }}{{ end }}
+{{ define "main" }}
+
+<!-- ====== HEADER ====== -->
+<div class="relative py-24 overflow-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] rounded-full pointer-events-none"
+        style="background: radial-gradient(ellipse, rgba(197,160,89,0.12), transparent); filter: blur(80px);"></div>
+    <div class="glow-orb w-[300px] h-[300px] -bottom-20 -right-20 opacity-[0.07]"
+        style="background: radial-gradient(circle, var(--gold-antique), transparent);"></div>
+    <div class="container mx-auto px-4 sm:px-6 text-center relative z-10">
+        <p class="text-xs font-black tracking-widest uppercase mb-5 font-ibm" style="color:var(--gold-antique);"
+            data-aos="fade-down">فَيْضُ الخَاطِر</p>
+        <h1 class="text-5xl md:text-7xl font-black font-reem mb-5" style="color:var(--ink-900);" data-aos="fade-up">{{
+            .Title }}</h1>
+        {{ with .Content }}
+        <div class="mt-6 font-ibm max-w-lg mx-auto" style="color:var(--ink-500);" data-aos="fade-up"
+            data-aos-delay="140">{{ . }}</div>
+        {{ end }}
+    </div>
+</div>
+
+<!-- ====== SMART FILTER ====== -->
+{{ $categories := slice }}
+{{ range .Pages }}
+    {{ if .Params.mood }}
+        {{ $categories = $categories | append .Params.mood }}
+    {{ end }}
+{{ end }}
+{{ $uniqueCategories := uniq $categories }}
+
+<div class="container mx-auto px-4 sm:px-6 max-w-6xl mb-12" data-aos="fade-up">
+    <div class="flex flex-wrap items-center justify-center gap-2 md:gap-4 p-2 rounded-2xl" id="filter-bar"
+        style="background:rgba(197,160,89,0.03); border:1px solid rgba(197,160,89,0.1);">
+        <button class="filter-btn active text-sm px-6 py-2.5" data-filter="all">الكل</button>
+        {{ range sort $uniqueCategories }}
+        <button class="filter-btn text-sm px-6 py-2.5" data-filter="{{ . }}">{{ . }}</button>
+        {{ end }}
+    </div>
+</div>
+
+<!-- ====== MASONRY GRID ====== -->
+<div class="container mx-auto px-4 sm:px-6 pb-24 max-w-6xl">
+    <div class="masonry-grid" id="thoughts-grid">
+        {{ range $i, $p := .Pages }}
+        <div class="masonry-item group" data-aos="fade-up" data-category="{{ $p.Params.mood | default "all" }}"
+            data-title="{{ $p.Title | htmlEscape }}"
+            data-summary="{{ $p.Summary | plainify | truncate 200 | htmlEscape }}">
+
+        <a href="{{ $p.Permalink }}" class="block hover:no-underline" style="text-decoration: none;">
+            <div class="h-full rounded-[32px] p-6 md:p-8 relative overflow-hidden transition-all duration-500 hover:scale-[1.02] flex flex-col group cursor-pointer"
+                 style="background: rgba(var(--bg-card-rgb, 253, 248, 240), 0.06); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(197, 160, 89, 0.12); box-shadow: 0 24px 48px rgba(0,0,0,0.08), inset 0 1px 0 rgba(197,160,89,0.08);">
+                
+                <!-- Warm Glow inside card -->
+                <div class="absolute -top-16 -right-16 w-32 h-32 rounded-full blur-[60px] pointer-events-none transition-opacity duration-500 opacity-0 group-hover:opacity-100" style="background: rgba(197,160,89,0.1);"></div>
+
+                <!-- Decorative lamp icon -->
+                <div class="absolute top-3 left-4 text-3xl font-serif leading-none select-none pointer-events-none opacity-10"
+                    style="color:var(--gold-antique);">
+                    <i data-lucide="lightbulb" class="w-12 h-12"></i>
+                </div>
+
+                <!-- Mood badge (if set) -->
+                {{ with $p.Params.mood }}
+                <span class="inline-block self-start text-xs font-bold px-4 py-1.5 rounded-full mb-5 z-10"
+                    style="background:rgba(197,160,89,0.1); color:var(--gold-antique); border:1px solid rgba(197,160,89,0.2);">{{ . }}</span>
+                {{ end }}
+
+                <!-- Title -->
+                <h2 class="font-black font-reem text-lg md:text-xl mb-4 leading-snug gradient-text-gold z-10">{{ $p.Title }}</h2>
+
+                <!-- Summary text -->
+                <p class="font-ibm leading-loose text-base mb-8 flex-grow z-10"
+                    style="color:var(--text-ambient); opacity:0.9;">
+                    {{ $p.Summary }}
+                </p>
+
+                <!-- Footer: actions -->
+                <div class="mt-auto pt-4 flex items-center justify-between border-t z-10" style="border-color: rgba(197,160,89,0.1);">
+                    <!-- Like button -->
+                    <button onclick="likeCard(event, this)" class="card-action-like flex items-center gap-1.5 transition-colors p-2 rounded-xl hover:bg-gold-antique/10"
+                        title="إعجاب">
+                        <i data-lucide="heart" class="w-4 h-4" style="color:var(--gold-antique);"></i>
+                        <span class="like-count font-ibm"
+                            style="font-size:0.8rem; font-weight:700; color:var(--gold-antique);">0</span>
+                    </button>
+                    <!-- Action buttons -->
+                    <div class="flex items-center gap-1">
+                        <button onclick="copyThought(event, this)" data-text="{{ $p.Summary | plainify | htmlEscape }}"
+                            class="flex items-center gap-1 transition-colors p-2 rounded-xl hover:bg-gold-antique/10" style="color:var(--text-muted);" title="نسخ">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                            <span class="text-xs font-ibm hidden sm:inline">نسخ</span>
+                        </button>
+                        <button onclick="shareThought(event, this)" data-url="{{ $p.Permalink }}"
+                            class="flex items-center gap-1 transition-colors p-2 rounded-xl hover:bg-gold-antique/10" style="color:var(--text-muted);" title="مشاركة">
+                            <i data-lucide="share-2" class="w-4 h-4"></i>
+                            <span class="text-xs font-ibm hidden sm:inline">مشاركة</span>
+                        </button>
+                        <!-- Read button -->
+                        <span class="flex items-center gap-1 transition-colors p-2 rounded-xl hover:bg-gold-antique/10" style="color:var(--gold-antique);">
+                            <i data-lucide="arrow-up-left" class="w-4 h-4"></i>
+                            <span class="text-xs font-ibm hidden sm:inline">اقرأ</span>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </a>
+        </div>
+        {{ end }}
+    </div>
+
+    <!-- Empty state -->
+    <p id="no-results" class="text-center py-16 font-ibm hidden" style="color:var(--ink-500);opacity:0.5;">
+        لا توجد خواطر بعد.
+    </p>
+</div>
+
+
+{{ end }}

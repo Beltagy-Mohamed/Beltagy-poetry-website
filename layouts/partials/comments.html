@@ -1,0 +1,26 @@
+{{ if .Site.Params.giscus_repo_id }}
+<div class="mt-16 pt-8 border-t" style="border-color: rgba(197,160,89,0.1);">
+    <h3 class="text-2xl font-reem font-bold mb-6 gradient-text-gold text-center">شاركنا رأيك</h3>
+    
+    <!-- Giscus Comments System -->
+    <div class="giscus"></div>
+    
+    <script src="https://giscus.app/client.js"
+            data-repo="{{ .Site.Params.giscus_repo }}"
+            data-repo-id="{{ .Site.Params.giscus_repo_id }}"
+            data-category="{{ .Site.Params.giscus_category }}"
+            data-category-id="{{ .Site.Params.giscus_category_id }}"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="ar"
+            crossorigin="anonymous"
+            async>
+    </script>
+</div>
+{{ else }}
+<!-- Comments are disabled. To enable, configure giscus_repo_id in hugo.toml -->
+{{ end }}

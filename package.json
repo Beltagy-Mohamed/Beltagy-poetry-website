@@ -1,0 +1,20 @@
+{
+  "name": "beltagy-portfolio",
+  "version": "1.0.0",
+  "description": "The Engineer-Poet Portfolio",
+  "scripts": {
+    "start": "hugo server -D",
+    "build": "hugo --gc --minify"
+  },
+  "dependencies": {
+    "aos": "^2.3.4",
+    "lunr": "^2.3.9"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.16",
+    "hugo-extended": "^0.157.0",
+    "postcss": "^8.4.31",
+    "postcss-cli": "^10.1.0",
+    "tailwindcss": "^3.3.5"
+  }
+}

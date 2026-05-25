@@ -1,0 +1,5 @@
+{{- $.Scratch.Add "index" slice -}}
+{{- range where .Site.RegularPages "Type" "in" (slice "poetry" "quotes" "thoughts") -}}
+    {{- $.Scratch.Add "index" (dict "title" .Title "content" .Plain "permalink" .Permalink "type" .Type "summary" .Summary) -}}
+{{- end -}}
+{{- $.Scratch.Get "index" | jsonify -}}

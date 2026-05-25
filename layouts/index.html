@@ -1,0 +1,312 @@
+{{ define "main" }}
+
+<!-- ====== HERO ====== -->
+<section class="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+    <!-- Desert Background Video (with fallback image and slow Ken Burns zoom) -->
+    <div class="absolute inset-0 z-0 bg-cover bg-center" style="background-image: url('{{ `images/desert_bg.png` | absURL }}');">
+        <video autoplay loop muted playsinline referrerpolicy="no-referrer" class="w-full h-full object-cover object-center hero-bg-animate hero-bg-video" style="opacity: 0; transition: opacity 0.8s;" onplaying="this.style.opacity=1;" onerror="this.style.display='none';">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-wind-blowing-sand-over-desert-dunes-42324-large.mp4" type="video/mp4" onerror="this.parentNode.style.display='none';">
+        </video>
+        <!-- Light mode overlay: lighter to show more image/video -->
+        <div class="absolute inset-0 dark:hidden" style="background: linear-gradient(180deg, rgba(253,248,240,0.25) 0%, rgba(245,237,224,0.45) 50%, rgba(237,227,208,0.75) 100%);"></div>
+        <!-- Dark mode overlay -->
+        <div class="absolute inset-0 hidden dark:block" style="background: linear-gradient(180deg, rgba(26,13,22,0.3) 0%, rgba(26,13,22,0.5) 50%, rgba(26,13,22,0.85) 100%);"></div>
+        
+        <!-- Wavy Bottom Divider -->
+        <div class="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-10">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[60px]" style="fill: var(--velvet-base); filter: drop-shadow(0px -2px 5px rgba(0,0,0,0.02));">
+                <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"></path>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Warm parchment orbs -->
+    <div class="glow-orb w-[600px] h-[600px] -top-48 -right-48 opacity-[0.22] dark:opacity-[0.12]"
+        style="background: radial-gradient(circle, #d4903a, #c97340); animation-delay: 0s;"></div>
+    <div class="glow-orb w-[400px] h-[400px] -bottom-24 -left-24 opacity-[0.12] dark:opacity-[0.08]"
+        style="background: radial-gradient(circle, var(--gold-antique), var(--gold-400)); animation-delay: -6s;"></div>
+
+    <div class="container mx-auto px-4 sm:px-6 pt-32 pb-16 z-10 text-center max-w-3xl">
+
+        <!-- Ornament divider (top) -->
+        <div data-aos="fade-down" class="mb-8 flex items-center justify-center gap-4">
+            <div class="h-px w-16" style="background: linear-gradient(90deg,transparent,var(--gold-400));"></div>
+            <i data-lucide="feather" class="w-5 h-5" style="color: var(--gold-400); opacity: 0.7;"></i>
+            <div class="h-px w-16" style="background: linear-gradient(270deg,transparent,var(--gold-400));"></div>
+        </div>
+
+        <!-- Welcome Post Card -->
+        <div class="welcome-post-card" data-aos="fade-up" data-aos-delay="100">
+
+            <!-- Card Header: Avatar + Name + Badge -->
+            <div class="welcome-post-header">
+                <div class="welcome-avatar-wrapper">
+                    <img src="{{ `images/beltagy.png` | relURL }}" alt="بلتاجي الرمحي" class="welcome-avatar-img">
+                    <span class="welcome-avatar-pulse"></span>
+                </div>
+                <div class="welcome-post-meta">
+                    <div class="welcome-post-name-row">
+                        <span class="welcome-post-name">بلتاجي الرمحي</span>
+                        <!-- Gold Verified Badge -->
+                        <svg class="welcome-verified-badge" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="1.5" fill="rgba(197,160,89,0.15)" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <span class="welcome-post-subtitle">سفير البادية · الآن</span>
+                </div>
+            </div>
+
+            <!-- Card Body: Typewriter Text -->
+            <div class="welcome-post-body">
+                <p id="typewriter-text" class="welcome-post-text">
+                    <span id="typewriter-cursor" class="typewriter-cursor">|</span>
+                </p>
+            </div>
+
+            <!-- Card Footer: Engagement Bar -->
+            <div class="welcome-post-footer">
+                <button id="welcome-like-btn" class="welcome-action-btn" onclick="toggleWelcomeLike(this)">
+                    <svg class="welcome-action-icon welcome-heart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    <span class="welcome-like-count" id="welcome-like-count">١٥٤</span>
+                </button>
+                <button class="welcome-action-btn" onclick="copyWelcomeText()">
+                    <svg class="welcome-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                    </svg>
+                    <span id="copy-label">نسخ</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- CTA Buttons (Full Rounded + Ink Spread) -->
+        <div data-aos="fade-up" data-aos-delay="230"
+            class="mt-12 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-5">
+            <a href="{{ `poetry` | relLangURL }}" class="btn-ornate gap-2.5 w-full sm:w-auto">
+                <i data-lucide="scroll-text" class="w-5 h-5 ml-2"></i>
+                رِواق القوافي
+            </a>
+            <a href="{{ `quotes` | relLangURL }}" class="btn-ink gap-2.5 w-full sm:w-auto">
+                <i data-lucide="quote" class="w-5 h-5 ml-2"></i>
+                قُطوف
+            </a>
+            <a href="{{ `thoughts` | relLangURL }}" class="btn-ink gap-2.5 w-full sm:w-auto">
+                <i data-lucide="lightbulb" class="w-5 h-5 ml-2"></i>
+                فَيْضُ الخاطر
+            </a>
+            <a href="https://drive.google.com/drive/folders/11EyEawLzUXG7_vUI2pEqapli9XzqbNo9?usp=sharing" target="_blank" rel="noopener noreferrer" 
+               class="btn-ink gap-2.5 w-full sm:w-auto !bg-teal-700 hover:!bg-teal-600 !border-teal-500" style="color: white; box-shadow: 0 4px 15px rgba(20, 110, 110, 0.4);">
+                <i data-lucide="smartphone" class="w-5 h-5 ml-2"></i>
+                تحميل التطبيق
+            </a>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div data-aos="fade-up" data-aos-delay="380" class="mt-16 flex flex-col items-center gap-2 text-xs font-ibm"
+            style="color: var(--gold-antique); opacity: 0.6;">
+            <span class="tracking-widest">تفضّل</span>
+            <div class="w-5 h-8 rounded-full border-2 border-current flex items-start justify-center p-1">
+                <div class="w-1 h-2 rounded-full bg-current" style="animation: orb-float 1.5s ease-in-out infinite;">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ====== ABOUT BELTAGY (APPLE BENTO) ====== -->
+<section id="about" class="py-20 relative z-10" style="margin-top: -3rem; scroll-margin-top: 100px;">
+    <div class="container mx-auto px-4 sm:px-6 max-w-6xl">
+
+        <!-- Section Header -->
+        <div class="flex items-center gap-4 mb-14 justify-center" data-aos="fade-up">
+            <div class="h-px w-12 md:w-20" style="background: linear-gradient(90deg,transparent,var(--gold-antique));"></div>
+            <h2 class="text-3xl md:text-4xl font-black font-reem gradient-text-gold">النبذة والمسيرة</h2>
+            <div class="h-px w-12 md:w-20" style="background: linear-gradient(270deg,transparent,var(--gold-antique));"></div>
+        </div>
+
+        <!-- Hero Bio Card (Full Width) -->
+        <div data-aos="fade-up" data-aos-delay="50" class="mb-8 group">
+            <div class="rounded-[32px] p-8 md:p-12 relative overflow-hidden transition-all duration-500 hover:scale-[1.01]"
+                 style="background: rgba(var(--bg-card-rgb, 253, 248, 240), 0.06); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(197, 160, 89, 0.12); box-shadow: 0 24px 48px rgba(0,0,0,0.08), inset 0 1px 0 rgba(197,160,89,0.08);">
+                <div class="absolute -top-20 -right-20 w-56 h-56 rounded-full blur-[80px] pointer-events-none" style="background: rgba(212,144,58,0.06);"></div>
+                <div class="absolute -bottom-20 -left-20 w-40 h-40 rounded-full blur-[70px] pointer-events-none" style="background: rgba(197,160,89,0.05);"></div>
+                <p class="text-center text-lg md:text-xl leading-[2.2] font-ibm relative z-10 m-0" style="color: var(--text-ambient);">
+                    بلتاجي الرمحي، مهندس وشاعر وباحث في الأنثروبولوجيا الثقافية وحفظ التراث الشفاهي. يُعد من الأصوات الفاعلة في المشهد الأدبي البدوي المعاصر؛ حيث يرتكز مشروعه الشعري على تطويع خامات اللهجة البدوية في طرح تساؤلات وجودية وفلسفية. يسعى مشروعه إلى المساهمة في نشر الوعي المجتمعي، ونقل النص البدوي من الأغراض التقليدية للمدح والوصف إلى فضاء المكاشفة والقضايا الواقعية.
+                </p>
+            </div>
+        </div>
+
+        <!-- Bento Grid -->
+        <div class="grid md:grid-cols-2 gap-8">
+
+            <!-- Card 1: الجذور والهوية -->
+            <div data-aos="fade-up" data-aos-delay="100" class="group">
+                <div class="h-full rounded-[32px] p-8 md:p-10 relative overflow-hidden transition-all duration-500 hover:scale-[1.02]"
+                     style="background: rgba(var(--bg-card-rgb, 253, 248, 240), 0.06); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(197, 160, 89, 0.12); box-shadow: 0 24px 48px rgba(0,0,0,0.08), inset 0 1px 0 rgba(197,160,89,0.08);">
+                    <div class="absolute -top-16 -right-16 w-32 h-32 rounded-full blur-[60px] pointer-events-none" style="background: rgba(212,144,58,0.07);"></div>
+                    <div class="flex items-center gap-4 mb-6 relative z-10">
+                        <div class="w-11 h-11 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, rgba(197,160,89,0.15), rgba(197,160,89,0.04)); border: 1px solid rgba(197,160,89,0.2);">
+                            <i data-lucide="feather" class="w-5 h-5" style="color: var(--gold-antique);"></i>
+                        </div>
+                        <h3 class="text-xl font-black font-reem gradient-text-gold m-0">الجذور والهوية الثقافية</h3>
+                    </div>
+                    <div class="relative z-10 font-ibm leading-loose text-base" style="color: var(--text-ambient);">
+                        <p class="mb-5">ينتمي الرمحي إلى قبيلة الرماح، ذات الجذور التاريخية العريقة، مما انعكس على نتاجه الأكاديمي والأدبي بصبغة تراثية تجمع بين أصالة البادية وحداثة الطرح الفكري.</p>
+                        <p class="mb-3 font-bold text-sm" style="color: var(--gold-antique);">في إطار العمل الثقافي والمؤسسي:</p>
+                        <ul class="list-none space-y-3 pr-4 m-0 p-0 mr-1" style="border-right: 2px solid rgba(197,160,89,0.2);">
+                            <li class="relative pr-2" style="padding-right: 0.5rem;"><span class="absolute -right-[7px] top-[0.6rem] w-[8px] h-[8px] rounded-full" style="background: var(--gold-antique); box-shadow: 0 0 6px rgba(197,160,89,0.4);"></span>عضو مؤسس في نادي أدب بادية الفيوم.</li>
+                            <li class="relative pr-2" style="padding-right: 0.5rem;"><span class="absolute -right-[7px] top-[0.6rem] w-[8px] h-[8px] rounded-full" style="background: var(--gold-antique); box-shadow: 0 0 6px rgba(197,160,89,0.4);"></span>يمثل جزءاً من الحراك المعني بجمع وتوثيق أدب الصحراء عبر أقاليم مصر المختلفة.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: سفير البادية -->
+            <div data-aos="fade-up" data-aos-delay="200" class="group">
+                <div class="h-full rounded-[32px] p-8 md:p-10 relative overflow-hidden transition-all duration-500 hover:scale-[1.02]"
+                     style="background: rgba(var(--bg-card-rgb, 253, 248, 240), 0.06); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(197, 160, 89, 0.12); box-shadow: 0 24px 48px rgba(0,0,0,0.08), inset 0 1px 0 rgba(197,160,89,0.08);">
+                    <div class="absolute -top-16 -right-16 w-32 h-32 rounded-full blur-[60px] pointer-events-none" style="background: rgba(197,160,89,0.07);"></div>
+                    <div class="flex items-center gap-4 mb-6 relative z-10">
+                        <div class="w-11 h-11 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, rgba(197,160,89,0.15), rgba(197,160,89,0.04)); border: 1px solid rgba(197,160,89,0.2);">
+                            <i data-lucide="compass" class="w-5 h-5" style="color: var(--gold-antique);"></i>
+                        </div>
+                        <h3 class="text-xl font-black font-reem gradient-text-gold m-0">سفير البادية وحلقة الوصل</h3>
+                    </div>
+                    <div class="relative z-10 font-ibm leading-loose text-base" style="color: var(--text-ambient);">
+                        <p class="m-0">عُرف في الأوساط الثقافية بلقب &laquo;سفير البادية&raquo;، نتيجة لجهوده المستمرة كحلقة وصل ثقافية بين بادية الفيوم وبرقة الليبية، حيث خاض العديد من المساجلات الفكرية والشعرية التي أسهمت في توطيد الروابط التراثية بين شعراء البادية في القطرين.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: المشاركات (Full Width) -->
+            <div data-aos="fade-up" data-aos-delay="300" class="md:col-span-2 group">
+                <div class="h-full rounded-[32px] p-8 md:p-10 relative overflow-hidden transition-all duration-500 hover:scale-[1.01]"
+                     style="background: rgba(var(--bg-card-rgb, 253, 248, 240), 0.06); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(197, 160, 89, 0.12); box-shadow: 0 24px 48px rgba(0,0,0,0.08), inset 0 1px 0 rgba(197,160,89,0.08);">
+                    <div class="absolute -top-16 -right-16 w-32 h-32 rounded-full blur-[60px] pointer-events-none" style="background: rgba(212,144,58,0.07);"></div>
+                    <div class="flex items-center gap-4 mb-8 relative z-10">
+                        <div class="w-11 h-11 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, rgba(197,160,89,0.15), rgba(197,160,89,0.04)); border: 1px solid rgba(197,160,89,0.2);">
+                            <i data-lucide="award" class="w-5 h-5" style="color: var(--gold-antique);"></i>
+                        </div>
+                        <h3 class="text-xl font-black font-reem gradient-text-gold m-0">المشاركات والإسهامات البارزة</h3>
+                    </div>
+                    <div class="relative z-10 font-ibm leading-loose text-base grid md:grid-cols-2 gap-8" style="color: var(--text-ambient);">
+                        <div>
+                            <p class="mb-3 font-bold text-sm" style="color: var(--gold-antique);">على المستوى الإقليمي والعربي:</p>
+                            <ul class="list-none space-y-3 pr-4 m-0 p-0 mr-1" style="border-right: 2px solid rgba(197,160,89,0.2);">
+                                <li class="relative pr-2" style="padding-right: 0.5rem;"><span class="absolute -right-[7px] top-[0.6rem] w-[8px] h-[8px] rounded-full" style="background: var(--gold-antique); box-shadow: 0 0 6px rgba(197,160,89,0.4);"></span>مثّل الأدب البدوي في محافل عربية بارزة.</li>
+                                <li class="relative pr-2" style="padding-right: 0.5rem;"><span class="absolute -right-[7px] top-[0.6rem] w-[8px] h-[8px] rounded-full" style="background: var(--gold-antique); box-shadow: 0 0 6px rgba(197,160,89,0.4);"></span>شارك في عدة فعاليات مع وزارة الثقافة السعودية.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="mb-3 font-bold text-sm" style="color: var(--gold-antique);">على المستوى المحلي والوطني:</p>
+                            <ul class="list-none space-y-3 pr-4 m-0 p-0 mr-1" style="border-right: 2px solid rgba(197,160,89,0.2);">
+                                <li class="relative pr-2" style="padding-right: 0.5rem;"><span class="absolute -right-[7px] top-[0.6rem] w-[8px] h-[8px] rounded-full" style="background: var(--gold-antique); box-shadow: 0 0 6px rgba(197,160,89,0.4);"></span>أسهم كباحث وممثل لشعراء البادية في الندوة التثقيفية للقوات المسلحة المصرية بجامعة الفيوم.</li>
+                                <li class="relative pr-2" style="padding-right: 0.5rem;"><span class="absolute -right-[7px] top-[0.6rem] w-[8px] h-[8px] rounded-full" style="background: var(--gold-antique); box-shadow: 0 0 6px rgba(197,160,89,0.4);"></span>شارك ممثلاً عن البادية في مشروع جامعة الفيوم لتوثيق أعمال أدباء المحافظة.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ====== PREVIEW GRID (APPLE BENTO AESTHETIC) ====== -->
+<section class="py-16 relative z-10">
+    <div class="container mx-auto px-4 sm:px-6 max-w-7xl">
+        <div class="grid lg:grid-cols-3 gap-8">
+
+            <!-- Poetry (Bento Card) -->
+            <div data-aos="fade-up" data-aos-delay="0" class="group h-full">
+                <div class="h-full rounded-[32px] p-8 md:p-10 relative overflow-hidden transition-all duration-500 hover:scale-[1.02]"
+                     style="background: rgba(var(--bg-card-rgb, 253, 248, 240), 0.06); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(197, 160, 89, 0.12); box-shadow: 0 24px 48px rgba(0,0,0,0.08), inset 0 1px 0 rgba(197,160,89,0.08);">
+                    <!-- Warm Glow -->
+                    <div class="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-[70px] transition-colors duration-700" style="background: rgba(212,144,58,0.08); group-hover:background: rgba(212,144,58,0.14);"></div>
+                    
+                    <div class="flex items-center gap-4 mb-10 relative z-10">
+                        <div class="w-11 h-11 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, rgba(197,160,89,0.15), rgba(197,160,89,0.04)); border: 1px solid rgba(197,160,89,0.2);">
+                            <i data-lucide="scroll-text" class="w-5 h-5" style="color: var(--gold-antique);"></i>
+                        </div>
+                        <h3 class="text-xl font-black font-reem m-0 tracking-wide gradient-text-gold">رِواق القوافي</h3>
+                        <a href="{{ `poetry` | relLangURL }}" class="mr-auto w-9 h-9 rounded-full flex items-center justify-center transition-colors group/btn" style="background: rgba(197,160,89,0.06); border: 1px solid rgba(197,160,89,0.1);">
+                            <i data-lucide="arrow-left" class="w-4 h-4 transition-all group-hover/btn:-translate-x-0.5" style="color: var(--gold-antique); opacity: 0.6;"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="space-y-6 relative z-10">
+                        {{ range first 2 (where site.RegularPages "Section" "poetry") }}
+                        <a href="{{ .Permalink }}" class="block group/item py-4 border-t transition-colors" style="border-color: rgba(197,160,89,0.08);">
+                            <h4 class="font-black font-reem mb-3 text-lg md:text-xl transition-colors" style="color: var(--text-ambient);">{{ .Title }}</h4>
+                            {{ if .Params.key_verse }}
+                            <p class="italic text-sm leading-relaxed" style="font-family: 'Poppins', sans-serif !important; color: var(--text-muted); opacity: 0.8;">&ldquo;{{ .Params.key_verse | truncate 80 }}&rdquo;</p>
+                            {{ end }}
+                        </a>
+                        {{ end }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quotes (Bento Card) -->
+            <div data-aos="fade-up" data-aos-delay="120" class="group h-full">
+                <div class="h-full rounded-[32px] p-8 md:p-10 relative overflow-hidden transition-all duration-500 hover:scale-[1.02]"
+                     style="background: rgba(var(--bg-card-rgb, 253, 248, 240), 0.06); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(197, 160, 89, 0.12); box-shadow: 0 24px 48px rgba(0,0,0,0.08), inset 0 1px 0 rgba(197,160,89,0.08);">
+                    <!-- Warm Glow -->
+                    <div class="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-[70px] transition-colors duration-700" style="background: rgba(197,160,89,0.08);"></div>
+
+                    <div class="flex items-center gap-4 mb-10 relative z-10">
+                        <div class="w-11 h-11 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, rgba(197,160,89,0.15), rgba(197,160,89,0.04)); border: 1px solid rgba(197,160,89,0.2);">
+                            <i data-lucide="quote" class="w-5 h-5" style="color: var(--gold-antique);"></i>
+                        </div>
+                        <h3 class="text-xl font-black font-reem m-0 tracking-wide gradient-text-gold">القطوف</h3>
+                        <a href="{{ `quotes` | relLangURL }}" class="mr-auto w-9 h-9 rounded-full flex items-center justify-center transition-colors group/btn" style="background: rgba(197,160,89,0.06); border: 1px solid rgba(197,160,89,0.1);">
+                            <i data-lucide="arrow-left" class="w-4 h-4 transition-all group-hover/btn:-translate-x-0.5" style="color: var(--gold-antique); opacity: 0.6;"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="space-y-6 relative z-10">
+                        {{ range first 2 (where site.RegularPages "Section" "quotes") }}
+                        <a href="{{ .Permalink }}" class="block group/item py-4 border-t transition-colors" style="border-color: rgba(197,160,89,0.08);">
+                            <h4 class="font-bold font-reem mb-2 text-base md:text-lg transition-colors" style="color: var(--text-ambient);">{{ .Title }}</h4>
+                            {{ with .Params.source }}<p class="text-xs italic mb-2" style="color: var(--gold-antique); opacity: 0.6;">— {{ . }}</p>{{ end }}
+                            <p class="text-sm font-ibm leading-relaxed" style="color: var(--text-muted); opacity: 0.75;">{{ .Summary | truncate 100 }}</p>
+                        </a>
+                        {{ end }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thoughts (Bento Card) -->
+            <div data-aos="fade-up" data-aos-delay="240" class="group h-full">
+                <div class="h-full rounded-[32px] p-8 md:p-10 relative overflow-hidden transition-all duration-500 hover:scale-[1.02]"
+                     style="background: rgba(var(--bg-card-rgb, 253, 248, 240), 0.06); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid rgba(197, 160, 89, 0.12); box-shadow: 0 24px 48px rgba(0,0,0,0.08), inset 0 1px 0 rgba(197,160,89,0.08);">
+                    <!-- Warm Glow -->
+                    <div class="absolute -top-20 -right-20 w-40 h-40 rounded-full blur-[70px] transition-colors duration-700" style="background: rgba(197,160,89,0.08);"></div>
+
+                    <div class="flex items-center gap-4 mb-10 relative z-10">
+                        <div class="w-11 h-11 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, rgba(197,160,89,0.15), rgba(197,160,89,0.04)); border: 1px solid rgba(197,160,89,0.2);">
+                            <i data-lucide="lightbulb" class="w-5 h-5" style="color: var(--gold-antique);"></i>
+                        </div>
+                        <h3 class="text-xl font-black font-reem m-0 tracking-wide gradient-text-gold">فَيضٌ الخَاطِر</h3>
+                        <a href="{{ `thoughts` | relLangURL }}" class="mr-auto w-9 h-9 rounded-full flex items-center justify-center transition-colors group/btn" style="background: rgba(197,160,89,0.06); border: 1px solid rgba(197,160,89,0.1);">
+                            <i data-lucide="arrow-left" class="w-4 h-4 transition-all group-hover/btn:-translate-x-0.5" style="color: var(--gold-antique); opacity: 0.6;"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="space-y-6 relative z-10">
+                        {{ range first 2 (where site.RegularPages "Section" "thoughts") }}
+                        <a href="{{ .Permalink }}" class="block group/item py-4 border-t transition-colors" style="border-color: rgba(197,160,89,0.08);">
+                            <h4 class="font-bold font-reem mb-2 text-base md:text-lg transition-colors" style="color: var(--text-ambient);">{{ .Title }}</h4>
+                            <p class="text-sm font-ibm leading-relaxed" style="color: var(--text-muted); opacity: 0.75;">{{ .Summary | truncate 110 }}</p>
+                        </a>
+                        {{ end }}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{{ end }}
